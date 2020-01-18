@@ -1,7 +1,16 @@
-import React, { Fragment } from "react";
-import { Navbar } from "react-bootstrap";
+import React, { Fragment, useContext } from "react";
+import { Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Logo from "./logo.svg";
+
+import AuthContext from "../../context/auth/authContext";
+
 const MyNavbar = () => {
+  const authContext = useContext(AuthContext);
+  const { logoutUser, isAuthenticated } = authContext;
+  const onLogout = () => {
+    logoutUser();
+  };
   return (
     <Fragment>
       <Navbar bg='dark' variant='dark'>
@@ -16,6 +25,16 @@ const MyNavbar = () => {
           {"   "}
           Visa KBRI
         </Navbar.Brand>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+        <Navbar.Collapse id='basic-navbar-nav'>
+          <Nav className='ml-auto'>
+            {isAuthenticated ? (
+              <Nav.Link href='#!' onClick={onLogout}>
+                Logout
+              </Nav.Link>
+            ) : null}
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
     </Fragment>
   );

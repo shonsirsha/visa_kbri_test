@@ -1,24 +1,41 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import AuthContext from "../../context/auth/authContext";
 const Login = props => {
   const [user, setUser] = useState({
     email: "",
     password: ""
   });
 
+  const authContext = useContext(AuthContext);
+
+  const { loginUser, isAuthenticated, loadUser, loading } = authContext;
+  useEffect(() => {
+    loadUser();
+  }, []);
+  const { email, password } = user;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/visaform");
+    }
+  }, [isAuthenticated]);
+
   const onChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const onSubmit = e => {
     e.preventDefault();
+
     if (email === "" || password === "") {
-      setAlert("Please fill in all fields", "danger");
+      // setAlert("Please fill in all fields", "danger");
     } else {
       loginUser({
         email: email,
         password: password
       });
     }
+  };
 
   return (
     <div>
@@ -28,7 +45,7 @@ const Login = props => {
           <Col>
             <Card style={{ width: "24rem", margin: "0 auto" }}>
               <Card.Body>
-                <Form>
+                <Form onSubmit={onSubmit}>
                   <Form.Group controlId='formBasicEmail'>
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -36,6 +53,7 @@ const Login = props => {
                       placeholder='mail@example.com'
                       required
                       name='email'
+                      onChange={onChange}
                     />
                     <Form.Text className='text-muted'>
                       We'll never share your email with anyone else.
@@ -48,8 +66,9 @@ const Login = props => {
                       type='password'
                       placeholder='Password'
                       required
-                      minlength='6'
+                      minLength='6'
                       name='password'
+                      onChange={onChange}
                     />
                   </Form.Group>
 
