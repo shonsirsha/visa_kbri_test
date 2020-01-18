@@ -20,7 +20,25 @@ const Application = () => {
 
   const [currentTab, setCurrentTab] = useState(1);
 
-  const onSubmit = () => {};
+  const onSubmit = e => {
+    e.preventDefault();
+    if (currentTab === 3) {
+      //send to db
+    }
+  };
+
+  const onKeyDown = e => {
+    try {
+      if (e.keyCode === 13) {
+        document.getElementById(e.target.id).blur();
+        if (currentTab !== 3) {
+          clickTab(currentTab + 1);
+        }else{
+        
+        }
+      }
+    } catch (e) {}
+  };
 
   const onSelectTab = num => {
     setCurrentTab(num);
@@ -70,7 +88,6 @@ const Application = () => {
         </div>
         <Row className='my-5 ' style={{ margin: "0 auto" }}>
           <p>
-            Status:{" "}
             <span style={{ color: saved ? "green" : "red" }}>
               {saved ? "Saved" : "Not Saved"}
             </span>
@@ -78,7 +95,7 @@ const Application = () => {
 
           <Card style={{ width: "100%", margin: "0 auto" }}>
             <Card.Body>
-              <Form onSubmit={onSubmit}>
+              <Form onKeyDown={onKeyDown} onSubmit={onSubmit}>
                 {currentTab === 1 && <Step1 />}
                 {currentTab === 2 && <Step2 />}
                 {currentTab === 3 && <Step3 />}

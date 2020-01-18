@@ -4,11 +4,20 @@ import VisaApplicationReducer from "./visaApplicationReducer";
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
 
-import { STEP_1, STEP_2, STEP_3, SAVE_STEP, SAVE_TO_DB } from "../types";
+import {
+  STEP_1,
+  STEP_2,
+  STEP_3,
+  SAVE_STEP,
+  SAVE_TO_DB,
+  UNSAVE_WHILE_TYPING,
+  SET_LOADING
+} from "../types";
 
 const VisaApplicationState = props => {
   const initialState = {
     full_application: null,
+    loading: false,
     firstName: "",
     lastName: "",
     destination: "",
@@ -19,6 +28,7 @@ const VisaApplicationState = props => {
   const [state, dispatch] = useReducer(VisaApplicationReducer, initialState);
 
   const setApplicationToState = (application, stepNum) => {
+    setLoading();
     if (stepNum === 1) {
       dispatch({ type: STEP_1, payload: application });
     } else if (stepNum === 2) {
@@ -27,6 +37,10 @@ const VisaApplicationState = props => {
       dispatch({ type: STEP_3, payload: application });
     }
     saveStep();
+  };
+
+  const unsaveWhileTyping = () => {
+    dispatch({ type: UNSAVE_WHILE_TYPING });
   };
 
   const saveStep = () => {
@@ -40,6 +54,10 @@ const VisaApplicationState = props => {
     dispatch({ type: SAVE_TO_DB });
   };
 
+  const setLoading = () => {
+    dispatch({ type: SET_LOADING });
+  };
+
   return (
     <VisaApplicationContext.Provider
       value={{
@@ -48,8 +66,10 @@ const VisaApplicationState = props => {
         destination: state.destination,
         passportNumber: state.passportNumber,
         saved: state.saved,
+        loading: state.loading,
         setApplicationToState,
-        saveToDb
+        saveToDb,
+        unsaveWhileTyping
       }}
     >
       {props.children}

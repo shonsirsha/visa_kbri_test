@@ -1,4 +1,12 @@
-import { STEP_1, STEP_2, STEP_3, SAVE_STEP, SAVE_TO_DB } from "../types";
+import {
+  STEP_1,
+  STEP_2,
+  STEP_3,
+  SAVE_STEP,
+  SAVE_TO_DB,
+  UNSAVE_WHILE_TYPING,
+  SET_LOADING
+} from "../types";
 export default (state, action) => {
   switch (action.type) {
     case STEP_1:
@@ -40,7 +48,18 @@ export default (state, action) => {
           destination: state.destination,
           passportNumber: state.passportNumber
         },
-        saved: true
+        saved: true,
+        loading: false
+      };
+    case UNSAVE_WHILE_TYPING:
+      return {
+        ...state,
+        saved: false
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true
       };
 
     default:

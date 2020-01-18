@@ -6,7 +6,11 @@ import VisaApplicationContext from "../../context/visa_application/visaApplicati
 
 const Step3 = () => {
   const visaApplicationContext = useContext(VisaApplicationContext);
-  const { setApplicationToState, passportNumber } = visaApplicationContext;
+  const {
+    setApplicationToState,
+    passportNumber,
+    unsaveWhileTyping
+  } = visaApplicationContext;
 
   const [application, setApplication] = useState({
     passportNumber: passportNumber
@@ -14,6 +18,7 @@ const Step3 = () => {
 
   const onChange = e => {
     setApplication({ ...application, [e.target.name]: e.target.value });
+    unsaveWhileTyping();
   };
 
   const onBlur = () => {
@@ -27,7 +32,6 @@ const Step3 = () => {
         <Form.Control
           type='text'
           placeholder='Passport Number'
-          required
           name='passportNumber'
           onChange={onChange}
           onBlur={onBlur}

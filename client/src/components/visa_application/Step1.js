@@ -6,7 +6,12 @@ import VisaApplicationContext from "../../context/visa_application/visaApplicati
 
 const Step1 = () => {
   const visaApplicationContext = useContext(VisaApplicationContext);
-  const { setApplicationToState, firstName, lastName } = visaApplicationContext;
+  const {
+    setApplicationToState,
+    firstName,
+    lastName,
+    unsaveWhileTyping
+  } = visaApplicationContext;
 
   const [application, setApplication] = useState({
     firstName: firstName,
@@ -15,6 +20,7 @@ const Step1 = () => {
 
   const onChange = e => {
     setApplication({ ...application, [e.target.name]: e.target.value });
+    unsaveWhileTyping();
   };
 
   const onBlur = () => {
@@ -28,7 +34,6 @@ const Step1 = () => {
         <Form.Control
           type='text'
           placeholder='John'
-          required
           name='firstName'
           onChange={onChange}
           onBlur={onBlur}
@@ -41,7 +46,6 @@ const Step1 = () => {
         <Form.Control
           type='text'
           placeholder='Doe'
-          required
           name='lastName'
           onChange={onChange}
           onBlur={onBlur}
