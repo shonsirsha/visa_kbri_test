@@ -5,26 +5,26 @@ const VisaApplicationSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
+  appId: {
+    type: String
+  },
   firstName: {
-    type: String,
-    required: true
+    type: String
   },
   lastName: {
-    type: String,
-    required: true,
-    unique: true
+    type: String
   },
   destination: {
-    type: String,
-    required: true
+    type: String
   },
   destination: {
-    type: String,
-    required: true
+    type: String
+  },
+  passportNumber: {
+    type: String
   },
   status: {
-    type: String,
-    required: true
+    type: String
   },
   date_created: {
     type: Date,

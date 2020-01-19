@@ -4,12 +4,15 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 
+//visa application
 export const STEP_1 = "STEP_1";
 export const STEP_2 = "STEP_2";
 export const STEP_3 = "STEP_3";
 export const SAVE_STEP = "SAVE_STEP";
 export const SAVE_TO_DB = "SAVE_TO_DB";
-
+export const SET_APPID = "SET_APPID";
 export const UNSAVE_WHILE_TYPING = "UNSAVE_WHILE_TYPING";
 
+//general
 export const SET_LOADING = "SET_LOADING";
+export const UNSET_LOADING = "UNSET_LOADING";

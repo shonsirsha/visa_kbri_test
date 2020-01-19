@@ -1,21 +1,33 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, Fragment } from "react";
 import { Container, Row, Form, Button, Card, Nav } from "react-bootstrap";
+import uniqid from "uniqid";
+
+import isEmpty from "../../utils/isEmpty";
+
 import AuthContext from "../../context/auth/authContext";
 // import { Link } from "react-router-dom";
 import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
 
+import Spinner from "../layouts/Spinner";
+
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+const appId = uniqid("Application-");
 
 const Application = () => {
   const authContext = useContext(AuthContext);
   const visaApplicationContext = useContext(VisaApplicationContext);
-  const { saved, saveToDb } = visaApplicationContext;
+  const {
+    saved,
+    saveToDb,
+    loading,
+    setApplicationIdToState
+  } = visaApplicationContext;
   const { loadUser, user } = authContext;
-
   useEffect(() => {
     loadUser();
+    setApplicationIdToState(appId);
   }, []);
 
   const [currentTab, setCurrentTab] = useState(1);
@@ -23,7 +35,7 @@ const Application = () => {
   const onSubmit = e => {
     e.preventDefault();
     if (currentTab === 3) {
-      //send to db
+      saveToDb({ status: "finished" });
     }
   };
 
@@ -33,16 +45,17 @@ const Application = () => {
         document.getElementById(e.target.id).blur();
         if (currentTab !== 3) {
           clickTab(currentTab + 1);
-        }else{
-        
+        } else {
         }
       }
     } catch (e) {}
   };
 
   const onSelectTab = num => {
-    setCurrentTab(num);
-    saveToDb();
+    if (num !== currentTab) {
+      setCurrentTab(num);
+      saveToDb({ status: "unfinished" });
+    }
   };
 
   const clickTab = num => {
@@ -51,6 +64,47 @@ const Application = () => {
       tabs[num - 1].click();
     } catch (e) {}
   };
+
+  const loadingSpinner = (
+    <Fragment>
+      <Spinner />
+    </Fragment>
+  );
+
+  const forms = (
+    <Form onKeyDown={onKeyDown} onSubmit={onSubmit}>
+      {currentTab === 1 && <Step1 />}
+      {currentTab === 2 && <Step2 />}
+      {currentTab === 3 && <Step3 />}
+
+      <div
+        style={{
+          textAlign: "center"
+        }}
+      >
+        {currentTab > 1 && (
+          <Button
+            variant='outline-primary'
+            style={{ marginRight: "8px" }}
+            onClick={() => clickTab(currentTab - 1)}
+          >
+            Previous
+          </Button>
+        )}
+        {currentTab <= 2 && (
+          <Button variant='primary' onClick={() => clickTab(currentTab + 1)}>
+            Next
+          </Button>
+        )}
+
+        {currentTab == 3 && (
+          <Button variant='success' type='submit'>
+            Submit & Apply
+          </Button>
+        )}
+      </div>
+    </Form>
+  );
   return (
     <div>
       <Container>
@@ -88,52 +142,15 @@ const Application = () => {
         </div>
         <Row className='my-5 ' style={{ margin: "0 auto" }}>
           <p>
+            Application ID: <kbd>{appId}</kbd>
+            <br />
             <span style={{ color: saved ? "green" : "red" }}>
               {saved ? "Saved" : "Not Saved"}
             </span>
           </p>
 
           <Card style={{ width: "100%", margin: "0 auto" }}>
-            <Card.Body>
-              <Form onKeyDown={onKeyDown} onSubmit={onSubmit}>
-                {currentTab === 1 && <Step1 />}
-                {currentTab === 2 && <Step2 />}
-                {currentTab === 3 && <Step3 />}
-
-                <div
-                  style={{
-                    textAlign: "center"
-                  }}
-                >
-                  {currentTab > 1 && (
-                    <Button
-                      variant='outline-primary'
-                      style={{ marginRight: "8px" }}
-                      onClick={() => clickTab(currentTab - 1)}
-                    >
-                      Previous
-                    </Button>
-                  )}
-                  {currentTab <= 2 && (
-                    <Button
-                      variant='primary'
-                      onClick={() => clickTab(currentTab + 1)}
-                    >
-                      Next
-                    </Button>
-                  )}
-
-                  {currentTab == 3 && (
-                    <Button
-                      variant='success'
-                      onClick={() => clickTab(currentTab + 1)}
-                    >
-                      Submit & Apply
-                    </Button>
-                  )}
-                </div>
-              </Form>
-            </Card.Body>
+            <Card.Body>{loading ? loadingSpinner : forms}</Card.Body>
           </Card>
         </Row>
       </Container>

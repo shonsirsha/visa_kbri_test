@@ -5,7 +5,9 @@ import {
   SAVE_STEP,
   SAVE_TO_DB,
   UNSAVE_WHILE_TYPING,
-  SET_LOADING
+  SET_LOADING,
+  UNSET_LOADING,
+  SET_APPID
 } from "../types";
 export default (state, action) => {
   switch (action.type) {
@@ -36,7 +38,8 @@ export default (state, action) => {
           firstName: state.firstName,
           lastName: state.lastName,
           destination: state.destination,
-          passportNumber: state.passportNumber
+          passportNumber: state.passportNumber,
+          appId: state.appId
         }
       };
     case SAVE_TO_DB:
@@ -46,20 +49,31 @@ export default (state, action) => {
           firstName: state.firstName,
           lastName: state.lastName,
           destination: state.destination,
-          passportNumber: state.passportNumber
+          passportNumber: state.passportNumber,
+          appId: state.appId
         },
-        saved: true,
-        loading: false
+        saved: true
       };
     case UNSAVE_WHILE_TYPING:
       return {
         ...state,
         saved: false
       };
+    case SET_APPID:
+      return {
+        ...state,
+        appId: action.payload
+      };
     case SET_LOADING:
       return {
         ...state,
         loading: true
+      };
+
+    case UNSET_LOADING:
+      return {
+        ...state,
+        loading: false
       };
 
     default:
