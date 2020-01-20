@@ -15,7 +15,9 @@ import {
   UNSAVE_WHILE_TYPING,
   SET_LOADING,
   SET_APPID,
-  UNSET_LOADING
+  UNSET_LOADING,
+  ADD_ERROR,
+  CLEAR_ERROR
 } from "../types";
 
 const VisaApplicationState = props => {
@@ -27,6 +29,7 @@ const VisaApplicationState = props => {
     lastName: "",
     destination: "",
     passportNumber: "",
+    visaApplicationErrs: [],
     saved: false
   };
 
@@ -49,7 +52,6 @@ const VisaApplicationState = props => {
 
   const saveToDb = async status => {
     setLoading();
-
     let canSave = true;
 
     const completeApplicationObj = { ...state.full_application, ...status };
@@ -61,19 +63,30 @@ const VisaApplicationState = props => {
     };
 
     if (status.status === "finished") {
-      for (let key in state.full_application) {
-        if (
-          typeof state.full_application[key] === "string" &&
-          isEmpty(state.full_application[key])
-        ) {
-          canSave = false;
-          console.error(key + " is empty.");
+      dispatch({ type: CLEAR_ERROR });
+      if (state.full_application !== null) {
+        for (let key in state.full_application) {
+          if (
+            typeof state.full_application[key] === "string" &&
+            isEmpty(state.full_application[key])
+          ) {
+            console.log("WIWI");
+            canSave = false;
+
+            dispatch({ type: ADD_ERROR, payload: `${key}` });
+          }
         }
+      } else {
+        dispatch({ type: ADD_ERROR, payload: "fillAll" });
       }
+
       //loop thru and checks if none of the state is empty
     }
 
-    if (state.saved === false && canSave === true) {
+    if (!canSave) {
+    }
+
+    if (state.saved === false && canSave) {
       try {
         const res = await axios.post(
           "/api/visa_application",
@@ -116,6 +129,7 @@ const VisaApplicationState = props => {
         passportNumber: state.passportNumber,
         saved: state.saved,
         loading: state.loading,
+        visaApplicationErrs: state.visaApplicationErrs,
         setApplicationToState,
         saveToDb,
         saveStep,

@@ -7,7 +7,9 @@ import {
   UNSAVE_WHILE_TYPING,
   SET_LOADING,
   UNSET_LOADING,
-  SET_APPID
+  SET_APPID,
+  ADD_ERROR,
+  CLEAR_ERROR
 } from "../types";
 export default (state, action) => {
   switch (action.type) {
@@ -63,6 +65,16 @@ export default (state, action) => {
       return {
         ...state,
         appId: action.payload
+      };
+    case ADD_ERROR:
+      return {
+        ...state,
+        visaApplicationErrs: [action.payload, ...state.visaApplicationErrs]
+      };
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        visaApplicationErrs: []
       };
     case SET_LOADING:
       return {

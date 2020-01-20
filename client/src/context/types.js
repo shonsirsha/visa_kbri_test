@@ -16,3 +16,7 @@ export const UNSAVE_WHILE_TYPING = "UNSAVE_WHILE_TYPING";
 //general
 export const SET_LOADING = "SET_LOADING";
 export const UNSET_LOADING = "UNSET_LOADING";
+export const SET_ALERT = "SET_ALERT";
+export const CLEAR_ALERT = "CLEAR_ALERT";
+export const ADD_ERROR = "ADD_ERRORS";
+export const CLEAR_ERROR = "CLEAR_ERROR";

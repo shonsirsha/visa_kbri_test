@@ -22,7 +22,7 @@ const Application = () => {
     saved,
     saveToDb,
     loading,
-    setApplicationIdToState
+    setApplicationIdToState,
   } = visaApplicationContext;
   const { loadUser, user } = authContext;
   useEffect(() => {

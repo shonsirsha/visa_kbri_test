@@ -8,10 +8,14 @@ import Navbar from "./components/layouts/MyNavbar";
 import Home from "./components/pages/Home";
 import Login from "./components/auth/Login";
 import VisaApplication from "./components/visa_application/Application";
+import Alert from "./components/layouts/Alert";
+
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import setAuthToken from "./utils/setAuthToken";
 import PrivateRoute from "./components/routing/PrivateRoute";
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -22,13 +26,19 @@ function App() {
       <Router>
         <Fragment>
           <Navbar />
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/login' component={Login} />
-            <VisaApplicationState>
-              <Route exact path='/visaform' component={VisaApplication} />
-            </VisaApplicationState>
-          </Switch>
+          <VisaApplicationState>
+            <Alert />
+
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route exact path='/login' component={Login} />
+              <PrivateRoute
+                exact
+                path='/visaform'
+                component={VisaApplication}
+              />
+            </Switch>
+          </VisaApplicationState>
         </Fragment>
       </Router>
     </AuthState>
