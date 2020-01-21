@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import AuthContext from "../../context/auth/authContext";
+import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
+
 const Login = props => {
   const [user, setUser] = useState({
     email: "",
@@ -8,9 +10,13 @@ const Login = props => {
   });
 
   const authContext = useContext(AuthContext);
+  
+  const visaApplicationContext = useContext(VisaApplicationContext);
+  const { destroyAllState } = visaApplicationContext;
 
   const { loginUser, isAuthenticated, loadUser, loading } = authContext;
   useEffect(() => {
+    destroyAllState();
     loadUser();
   }, []);
   const { email, password } = user;

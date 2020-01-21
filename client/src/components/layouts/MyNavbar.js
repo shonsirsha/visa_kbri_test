@@ -7,14 +7,16 @@ import AuthContext from "../../context/auth/authContext";
 
 const MyNavbar = () => {
   const authContext = useContext(AuthContext);
+
   const { logoutUser, isAuthenticated } = authContext;
+
   const onLogout = () => {
     logoutUser();
   };
   return (
     <Fragment>
       <Navbar bg='dark' variant='dark'>
-        <Navbar.Brand href='#home'>
+        <Navbar.Brand href='/'>
           <img
             alt=''
             src={Logo}

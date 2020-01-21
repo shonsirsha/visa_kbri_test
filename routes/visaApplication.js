@@ -53,21 +53,29 @@ router.post("/", auth, async (req, res) => {
         res.json(doc);
       });
     }
-
-    // const application = await newApplication.save();
-
-    // res.json(application);
-    // const checkApp = await VisaApplication.findOne({
-    //   applicationId: "1321"
-    // });
-    // if (checkApp === null) {
-    //   const application = await newApplication.save();
-    // } else {
-    //   res.json(checkApp);
-    // }
   } catch (e) {
     console.error(e.message);
     res.status(500).send(e.message);
+  }
+});
+
+//@route    get api/visa_applications/singlevisa/:id
+//@desc     get a single application of a user by visaappid by that user
+//@access   Private
+
+router.get("/singlevisa/:id", auth, async (req, res) => {
+  try {
+    const visaApp = await VisaApplication.findOne({
+      user: req.user.id,
+      appId: req.params.id
+    });
+    if (visaApp === null) {
+      res.status(404).json({ msg: "Visa application is not found" });
+    }
+    res.status(200).json(visaApp);
+  } catch (e) {
+    res.status(500).json({ msg: e.message });
+    // res.status(500).send(e.message);
   }
 });
 

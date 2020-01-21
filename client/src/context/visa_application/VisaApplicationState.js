@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import VisaApplicationContext from "./visaApplicationContext";
 import VisaApplicationReducer from "./visaApplicationReducer";
 import axios from "axios";
-import setAuthToken from "../../utils/setAuthToken";
+// import setAuthToken from "../../utils/setAuthToken";
 
 import isEmpty from "../../utils/isEmpty";
 
@@ -17,7 +17,11 @@ import {
   SET_APPID,
   UNSET_LOADING,
   ADD_ERROR,
-  CLEAR_ERROR
+  CLEAR_ERROR,
+  SET_FINISHED_APPLICATION,
+  GET_SINGLE_APP,
+  GET_SINGLE_APP_ERROR,
+  DESTROY_ALL_STATE
 } from "../types";
 
 const VisaApplicationState = props => {
@@ -31,7 +35,8 @@ const VisaApplicationState = props => {
     passportNumber: "",
     visaApplicationErrs: [],
     saved: false,
-    finished: null
+    finished: null,
+    notFound: false
   };
 
   const [state, dispatch] = useReducer(VisaApplicationReducer, initialState);
@@ -83,9 +88,6 @@ const VisaApplicationState = props => {
       //loop thru and checks if none of the state is empty
     }
 
-    if (!canSave) {
-    }
-
     if (state.saved === false && canSave) {
       try {
         const res = await axios.post(
@@ -94,6 +96,9 @@ const VisaApplicationState = props => {
           config
         );
         dispatch({ type: SAVE_TO_DB });
+        if (status.status === "finished") {
+          dispatch({ type: SET_FINISHED_APPLICATION });
+        }
       } catch (err) {
         console.error(JSON.stringify(err.response.data.msg));
 
@@ -104,12 +109,33 @@ const VisaApplicationState = props => {
     unsetLoading();
   };
 
+  const getSingleVisaAppById = async visaAppId => {
+    try {
+      const res = await axios.get(
+        `/api/visa_application/singlevisa/${visaAppId}`
+      );
+      if (res.data.status === "unfinished") {
+        dispatch({ type: GET_SINGLE_APP, payload: res.data });
+      } else if (res.data.status === "finished") {
+        // display fully submitted visa (no edit).
+        console.log("WIWI WOWO");
+      }
+    } catch (err) {
+      dispatch({ type: GET_SINGLE_APP_ERROR, payload: err.response.data.msg });
+      //go to 404..?
+    }
+  };
+
   const setApplicationIdToState = appId => {
     dispatch({ type: SET_APPID, payload: appId });
   };
 
   const setLoading = () => {
     dispatch({ type: SET_LOADING });
+  };
+
+  const destroyAllState = () => {
+    dispatch({ type: DESTROY_ALL_STATE });
   };
 
   const unsetLoading = () => {
@@ -132,11 +158,14 @@ const VisaApplicationState = props => {
         loading: state.loading,
         visaApplicationErrs: state.visaApplicationErrs,
         finished: state.finished,
+        notFound: state.notFound,
         setApplicationToState,
         saveToDb,
         saveStep,
+        getSingleVisaAppById,
         unsaveWhileTyping,
-        setApplicationIdToState
+        setApplicationIdToState,
+        destroyAllState
       }}
     >
       {props.children}

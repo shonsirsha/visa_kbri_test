@@ -18,6 +18,13 @@ const Step1 = () => {
     lastName: lastName
   });
 
+  useEffect(() => {
+    setApplication({
+      firstName: firstName,
+      lastName: lastName
+    });
+  }, [firstName, lastName]);
+
   const onChange = e => {
     setApplication({ ...application, [e.target.name]: e.target.value });
     unsaveWhileTyping();

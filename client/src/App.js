@@ -5,10 +5,13 @@ import AuthState from "./context/auth/AuthState";
 import VisaApplicationState from "./context/visa_application/VisaApplicationState";
 
 import Navbar from "./components/layouts/MyNavbar";
+import Alert from "./components/layouts/Alert";
+
 import Home from "./components/pages/Home";
 import Login from "./components/auth/Login";
+import NotFound from "./components/pages/NotFound";
 import VisaApplication from "./components/visa_application/Application";
-import Alert from "./components/layouts/Alert";
+import Visas from "./components/visa_application/Visas";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -32,7 +35,17 @@ function App() {
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/login' component={Login} />
-              <Route exact path='/visaform' component={VisaApplication} />
+
+              {["/visaform", "/visaform/:visaAppId"].map((path, index) => (
+                <PrivateRoute
+                  exact
+                  path={path}
+                  key={index}
+                  component={VisaApplication}
+                />
+              ))}
+              <Route exact path='/applications' component={Visas} />
+              <Route component={NotFound} />
             </Switch>
           </VisaApplicationState>
         </Fragment>

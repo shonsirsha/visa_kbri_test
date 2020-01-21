@@ -1,7 +1,15 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Jumbotron, Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
+
 const Home = () => {
+  const visaApplicationContext = useContext(VisaApplicationContext);
+  const { destroyAllState } = visaApplicationContext;
+
+  useEffect(() => {
+    destroyAllState();
+  }, []);
   return (
     <Fragment>
       <Jumbotron>

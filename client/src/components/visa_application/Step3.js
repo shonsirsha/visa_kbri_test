@@ -1,6 +1,6 @@
 //travel
 
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
 
@@ -15,6 +15,12 @@ const Step3 = () => {
   const [application, setApplication] = useState({
     passportNumber: passportNumber
   });
+
+  useEffect(() => {
+    setApplication({
+      passportNumber: passportNumber
+    });
+  }, []);
 
   const onChange = e => {
     setApplication({ ...application, [e.target.name]: e.target.value });

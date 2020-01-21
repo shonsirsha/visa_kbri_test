@@ -1,6 +1,6 @@
 //travel
 
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
 
@@ -15,6 +15,12 @@ const Step2 = () => {
   const [application, setApplication] = useState({
     destination: destination
   });
+
+  useEffect(() => {
+    setApplication({
+      destination: destination
+    });
+  }, []);
 
   const onChange = e => {
     setApplication({ ...application, [e.target.name]: e.target.value });
@@ -32,7 +38,6 @@ const Step2 = () => {
         <Form.Control
           type='text'
           placeholder='Destination'
-          
           name='destination'
           onChange={onChange}
           onBlur={onBlur}

@@ -2,10 +2,7 @@ import React, { useEffect, useContext, useState, Fragment } from "react";
 import { Container, Row, Form, Button, Card, Nav } from "react-bootstrap";
 import uniqid from "uniqid";
 
-import isEmpty from "../../utils/isEmpty";
-
 import AuthContext from "../../context/auth/authContext";
-// import { Link } from "react-router-dom";
 import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
 
 import Spinner from "../layouts/Spinner";
@@ -13,22 +10,56 @@ import Spinner from "../layouts/Spinner";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
-const appId = uniqid("Application-");
+let appId = uniqid("Application-");
 
-const Application = () => {
+const Application = props => {
   const authContext = useContext(AuthContext);
   const visaApplicationContext = useContext(VisaApplicationContext);
+  //if params exist this will be used
+  const [fullApplication, setFullApplication] = useState(null);
+  const [localSaved, setLocalSaved] = useState(false);
   const {
+    full_application, //coming from visa appl state
     saved,
     saveToDb,
+    getSingleVisaAppById,
     loading,
+    finished,
+    notFound,
     setApplicationIdToState
   } = visaApplicationContext;
   const { loadUser, user, isAuthenticated } = authContext;
+
   useEffect(() => {
     loadUser();
+
+    if (typeof props.match.params.visaAppId !== "undefined") {
+      //get single app by id; includes checking if id is legitimate and it's owned by current user.
+      getSingleVisaAppById(props.match.params.visaAppId);
+      appId = props.match.params.visaAppId;
+    }
+
     setApplicationIdToState(appId);
+
+    console.log("MATCHHHHHHH: " + props.match.params.visaAppId);
   }, []);
+
+  useEffect(() => {
+    if (notFound === true) {
+      props.history.push("/404");
+    }
+    if (finished === true) {
+      props.history.push("/applications");
+    }
+    if (typeof props.match.params.visaAppId !== "undefined") {
+      setLocalSaved(true);
+    } else {
+      setLocalSaved(saved);
+    }
+
+    console.log("local: " + JSON.stringify(localSaved));
+    console.log("saved: " + saved);
+  }, [notFound, finished, saved]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -106,7 +137,7 @@ const Application = () => {
     </Form>
   );
 
-  if (isAuthenticated && !authContext.loading) {
+  if (isAuthenticated && !authContext.loading && !notFound) {
     return (
       <div>
         <Container>
@@ -146,8 +177,8 @@ const Application = () => {
             <p>
               Application ID: <kbd>{appId}</kbd>
               <br />
-              <span style={{ color: saved ? "green" : "red" }}>
-                {saved ? "Saved" : "Not Saved"}
+              <span style={{ color: localSaved ? "green" : "red" }}>
+                {localSaved ? "Saved" : "Not Saved"}
               </span>
             </p>
 
