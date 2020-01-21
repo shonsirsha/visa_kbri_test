@@ -22,9 +22,9 @@ const Application = () => {
     saved,
     saveToDb,
     loading,
-    setApplicationIdToState,
+    setApplicationIdToState
   } = visaApplicationContext;
-  const { loadUser, user } = authContext;
+  const { loadUser, user, isAuthenticated } = authContext;
   useEffect(() => {
     loadUser();
     setApplicationIdToState(appId);
@@ -105,57 +105,62 @@ const Application = () => {
       </div>
     </Form>
   );
-  return (
-    <div>
-      <Container>
-        <div className='my-5'>
-          <Nav fill variant='tabs' defaultActiveKey={`tab-1`}>
-            <Nav.Item id={`tab-1`}>
-              <Nav.Link
-                className='myTab'
-                onClick={() => onSelectTab(1)}
-                eventKey='tab-1'
-              >
-                <h4>1. Personal</h4>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item id={`tab-2`}>
-              <Nav.Link
-                className='myTab'
-                onClick={() => onSelectTab(2)}
-                eventKey='tab-2'
-              >
-                <div id='aw'></div>
-                <h4>2. Travel</h4>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item id={`tab-3`}>
-              <Nav.Link
-                className='myTab'
-                onClick={() => onSelectTab(3)}
-                eventKey='tab-3'
-              >
-                <h4>3. Passport</h4>
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </div>
-        <Row className='my-5 ' style={{ margin: "0 auto" }}>
-          <p>
-            Application ID: <kbd>{appId}</kbd>
-            <br />
-            <span style={{ color: saved ? "green" : "red" }}>
-              {saved ? "Saved" : "Not Saved"}
-            </span>
-          </p>
 
-          <Card style={{ width: "100%", margin: "0 auto" }}>
-            <Card.Body>{loading ? loadingSpinner : forms}</Card.Body>
-          </Card>
-        </Row>
-      </Container>
-    </div>
-  );
+  if (isAuthenticated && !authContext.loading) {
+    return (
+      <div>
+        <Container>
+          <div className='my-5'>
+            <Nav fill variant='tabs' defaultActiveKey={`tab-1`}>
+              <Nav.Item id={`tab-1`}>
+                <Nav.Link
+                  className='myTab'
+                  onClick={() => onSelectTab(1)}
+                  eventKey='tab-1'
+                >
+                  <h4>1. Personal</h4>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item id={`tab-2`}>
+                <Nav.Link
+                  className='myTab'
+                  onClick={() => onSelectTab(2)}
+                  eventKey='tab-2'
+                >
+                  <div id='aw'></div>
+                  <h4>2. Travel</h4>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item id={`tab-3`}>
+                <Nav.Link
+                  className='myTab'
+                  onClick={() => onSelectTab(3)}
+                  eventKey='tab-3'
+                >
+                  <h4>3. Passport</h4>
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </div>
+          <Row className='my-5 ' style={{ margin: "0 auto" }}>
+            <p>
+              Application ID: <kbd>{appId}</kbd>
+              <br />
+              <span style={{ color: saved ? "green" : "red" }}>
+                {saved ? "Saved" : "Not Saved"}
+              </span>
+            </p>
+
+            <Card style={{ width: "100%", margin: "0 auto" }}>
+              <Card.Body>{loading ? loadingSpinner : forms}</Card.Body>
+            </Card>
+          </Row>
+        </Container>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 };
 
 export default Application;

@@ -32,11 +32,7 @@ function App() {
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/login' component={Login} />
-              <PrivateRoute
-                exact
-                path='/visaform'
-                component={VisaApplication}
-              />
+              <Route exact path='/visaform' component={VisaApplication} />
             </Switch>
           </VisaApplicationState>
         </Fragment>

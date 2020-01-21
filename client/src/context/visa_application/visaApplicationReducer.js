@@ -47,13 +47,7 @@ export default (state, action) => {
     case SAVE_TO_DB:
       return {
         ...state,
-        full_application: {
-          firstName: state.firstName,
-          lastName: state.lastName,
-          destination: state.destination,
-          passportNumber: state.passportNumber,
-          appId: state.appId
-        },
+        finished: true,
         saved: true
       };
     case UNSAVE_WHILE_TYPING:

@@ -30,7 +30,8 @@ const VisaApplicationState = props => {
     destination: "",
     passportNumber: "",
     visaApplicationErrs: [],
-    saved: false
+    saved: false,
+    finished: null
   };
 
   const [state, dispatch] = useReducer(VisaApplicationReducer, initialState);
@@ -70,7 +71,6 @@ const VisaApplicationState = props => {
             typeof state.full_application[key] === "string" &&
             isEmpty(state.full_application[key])
           ) {
-            console.log("WIWI");
             canSave = false;
 
             dispatch({ type: ADD_ERROR, payload: `${key}` });
@@ -93,9 +93,10 @@ const VisaApplicationState = props => {
           completeApplicationObj,
           config
         );
-        dispatch({ type: SAVE_TO_DB, payload: res.data });
+        dispatch({ type: SAVE_TO_DB });
       } catch (err) {
-        console.log(err.response.data);
+        console.error(JSON.stringify(err.response.data.msg));
+
         // dispatch({ type: CONTACT_ERROR, payload: err.response.data });
       }
     }
@@ -130,6 +131,7 @@ const VisaApplicationState = props => {
         saved: state.saved,
         loading: state.loading,
         visaApplicationErrs: state.visaApplicationErrs,
+        finished: state.finished,
         setApplicationToState,
         saveToDb,
         saveStep,

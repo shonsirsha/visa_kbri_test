@@ -37,52 +37,56 @@ const Login = props => {
     }
   };
 
-  return (
-    <div>
-      <Container>
-        <h1 className='my-5 text-center'>Log In</h1>
-        <Row>
-          <Col>
-            <Card style={{ width: "24rem", margin: "0 auto" }}>
-              <Card.Body>
-                <Form onSubmit={onSubmit}>
-                  <Form.Group controlId='formBasicEmail'>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type='email'
-                      placeholder='mail@example.com'
-                      required
-                      name='email'
-                      onChange={onChange}
-                    />
-                    <Form.Text className='text-muted'>
-                      We'll never share your email with anyone else.
-                    </Form.Text>
-                  </Form.Group>
+  if (!isAuthenticated && !loading) {
+    return (
+      <div>
+        <Container>
+          <h1 className='my-5 text-center'>Log In</h1>
+          <Row>
+            <Col>
+              <Card style={{ width: "24rem", margin: "0 auto" }}>
+                <Card.Body>
+                  <Form onSubmit={onSubmit}>
+                    <Form.Group controlId='formBasicEmail'>
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control
+                        type='email'
+                        placeholder='mail@example.com'
+                        required
+                        name='email'
+                        onChange={onChange}
+                      />
+                      <Form.Text className='text-muted'>
+                        We'll never share your email with anyone else.
+                      </Form.Text>
+                    </Form.Group>
 
-                  <Form.Group controlId='formBasicPassword'>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type='password'
-                      placeholder='Password'
-                      required
-                      minLength='6'
-                      name='password'
-                      onChange={onChange}
-                    />
-                  </Form.Group>
+                    <Form.Group controlId='formBasicPassword'>
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control
+                        type='password'
+                        placeholder='Password'
+                        required
+                        minLength='6'
+                        name='password'
+                        onChange={onChange}
+                      />
+                    </Form.Group>
 
-                  <Button variant='primary' type='submit'>
-                    Log In
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
-  );
+                    <Button variant='primary' type='submit'>
+                      Log In
+                    </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 };
 
 export default Login;
