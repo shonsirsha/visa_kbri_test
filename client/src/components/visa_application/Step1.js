@@ -10,7 +10,8 @@ const Step1 = () => {
     setApplicationToState,
     firstName,
     lastName,
-    unsaveWhileTyping
+    unsaveWhileTyping,
+    saveToDb
   } = visaApplicationContext;
 
   const [application, setApplication] = useState({

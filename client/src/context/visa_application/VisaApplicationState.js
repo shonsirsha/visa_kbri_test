@@ -21,7 +21,8 @@ import {
   SET_FINISHED_APPLICATION,
   GET_SINGLE_APP,
   GET_SINGLE_APP_ERROR,
-  DESTROY_ALL_STATE
+  DESTROY_ALL_STATE,
+  GET_ALL_APP
 } from "../types";
 
 const VisaApplicationState = props => {
@@ -34,6 +35,7 @@ const VisaApplicationState = props => {
     destination: "",
     passportNumber: "",
     visaApplicationErrs: [],
+    allApplications: null,
     saved: false,
     finished: null,
     notFound: false
@@ -126,6 +128,17 @@ const VisaApplicationState = props => {
     }
   };
 
+  const getAllVisaApp = async () => {
+    setLoading();
+    try {
+      const res = await axios.get(`/api/visa_application/visas`);
+      dispatch({ type: GET_ALL_APP, payload: res.data });
+    } catch (err) {
+      dispatch({ type: GET_SINGLE_APP_ERROR, payload: err.response.data.msg });
+      //go to 404..?
+    }
+  };
+
   const setApplicationIdToState = appId => {
     dispatch({ type: SET_APPID, payload: appId });
   };
@@ -159,9 +172,11 @@ const VisaApplicationState = props => {
         visaApplicationErrs: state.visaApplicationErrs,
         finished: state.finished,
         notFound: state.notFound,
+        allApplications: state.allApplications,
         setApplicationToState,
         saveToDb,
         saveStep,
+        getAllVisaApp,
         getSingleVisaAppById,
         unsaveWhileTyping,
         setApplicationIdToState,

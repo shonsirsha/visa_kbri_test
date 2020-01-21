@@ -10,7 +10,7 @@ import Spinner from "../layouts/Spinner";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
-let appId = uniqid("Application-");
+let appId;
 
 const Application = props => {
   const authContext = useContext(AuthContext);
@@ -26,11 +26,13 @@ const Application = props => {
     loading,
     finished,
     notFound,
+    destroyAllState,
     setApplicationIdToState
   } = visaApplicationContext;
   const { loadUser, user, isAuthenticated } = authContext;
-
+  let firstTime = true;
   useEffect(() => {
+    appId = uniqid("Application-");
     loadUser();
 
     if (typeof props.match.params.visaAppId !== "undefined") {
@@ -51,14 +53,10 @@ const Application = props => {
     if (finished === true) {
       props.history.push("/applications");
     }
-    if (typeof props.match.params.visaAppId !== "undefined") {
-      setLocalSaved(true);
-    } else {
-      setLocalSaved(saved);
-    }
+    setLocalSaved(saved);
 
-    console.log("local: " + JSON.stringify(localSaved));
-    console.log("saved: " + saved);
+    
+    
   }, [notFound, finished, saved]);
 
   const [currentTab, setCurrentTab] = useState(1);

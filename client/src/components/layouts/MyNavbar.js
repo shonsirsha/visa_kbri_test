@@ -31,9 +31,7 @@ const MyNavbar = () => {
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ml-auto'>
             {isAuthenticated ? (
-              <Nav.Link href='#!' onClick={onLogout}>
-                Logout
-              </Nav.Link>
+              <Nav.Link onClick={onLogout}>Logout</Nav.Link>
             ) : null}
           </Nav>
         </Navbar.Collapse>

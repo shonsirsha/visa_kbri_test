@@ -13,6 +13,7 @@ import {
   SET_FINISHED_APPLICATION,
   GET_SINGLE_APP,
   GET_SINGLE_APP_ERROR,
+  GET_ALL_APP,
   DESTROY_ALL_STATE
 } from "../types";
 export default (state, action) => {
@@ -78,7 +79,6 @@ export default (state, action) => {
       };
 
     case GET_SINGLE_APP:
-      console.log(action.payload);
       const {
         firstName,
         lastName,
@@ -112,6 +112,12 @@ export default (state, action) => {
       return {
         ...state,
         notFound: true
+      };
+    case GET_ALL_APP:
+      return {
+        ...state,
+        allApplications: action.payload,
+        loading: false
       };
     case ADD_ERROR:
       return {

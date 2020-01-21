@@ -79,4 +79,20 @@ router.get("/singlevisa/:id", auth, async (req, res) => {
   }
 });
 
+router.get("/visas", auth, async (req, res) => {
+  try {
+    const visaApp = await VisaApplication.find({
+      user: req.user.id,
+      appId: { $ne: null }
+    });
+    if (visaApp === null) {
+      res.status(404).json({ msg: "Visa applications are not found" });
+    }
+    res.status(200).json(visaApp);
+  } catch (e) {
+    res.status(500).json({ msg: e.message });
+    // res.status(500).send(e.message);
+  }
+});
+
 module.exports = router;
