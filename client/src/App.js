@@ -52,7 +52,7 @@ function App() {
                 />
               ))}
               <PrivateRoute exact path='/applications' component={Visas} />
-              {/* <Route component={NotFound} /> */}
+              <Route component={NotFound} />
             </Switch>
           </VisaApplicationState>
         </Fragment>
