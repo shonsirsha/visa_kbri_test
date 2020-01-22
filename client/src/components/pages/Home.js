@@ -21,7 +21,7 @@ const Home = () => {
             repellat optio voluptatibus quaerat explicabo nihil facilis
             necessitatibus dolor doloremque porro repudiandae at.
           </p>
-          <Link to='/login'>
+          <Link to='/applications'>
             <Button variant='primary'>Apply for visa</Button>
           </Link>
         </Container>

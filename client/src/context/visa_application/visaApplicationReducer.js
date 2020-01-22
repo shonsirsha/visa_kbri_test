@@ -103,6 +103,7 @@ export default (state, action) => {
         lastName: "",
         destination: "",
         passportNumber: "",
+        allApplications: [],
         visaApplicationErrs: [],
         saved: false,
         finished: null,

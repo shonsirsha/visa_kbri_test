@@ -35,7 +35,7 @@ const VisaApplicationState = props => {
     destination: "",
     passportNumber: "",
     visaApplicationErrs: [],
-    allApplications: null,
+    allApplications: [],
     saved: false,
     finished: null,
     notFound: false
@@ -89,8 +89,8 @@ const VisaApplicationState = props => {
 
       //loop thru and checks if none of the state is empty
     }
-
-    if (state.saved === false && canSave) {
+    // state.saved === false
+    if (canSave) {
       try {
         const res = await axios.post(
           "/api/visa_application",
@@ -111,20 +111,27 @@ const VisaApplicationState = props => {
     unsetLoading();
   };
 
-  const getSingleVisaAppById = async visaAppId => {
+  const getSingleVisaAppById = async (visaAppId, theSource) => {
     try {
       const res = await axios.get(
         `/api/visa_application/singlevisa/${visaAppId}`
       );
       if (res.data.status === "unfinished") {
-        dispatch({ type: GET_SINGLE_APP, payload: res.data });
+        if (theSource === "rawUrl") {
+          dispatch({ type: GET_SINGLE_APP, payload: res.data });
+        } else if (theSource === "allApplications") {
+          dispatch({ type: GET_SINGLE_APP_ERROR, payload: "" });
+        }
       } else if (res.data.status === "finished") {
+        if (theSource === "allApplications") {
+          dispatch({ type: GET_SINGLE_APP, payload: res.data });
+        } else if (theSource === "rawUrl") {
+          dispatch({ type: GET_SINGLE_APP_ERROR, payload: "" });
+        }
         // display fully submitted visa (no edit).
-        console.log("WIWI WOWO");
       }
     } catch (err) {
       dispatch({ type: GET_SINGLE_APP_ERROR, payload: err.response.data.msg });
-      //go to 404..?
     }
   };
 

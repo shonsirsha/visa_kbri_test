@@ -1,10 +1,11 @@
 import React, { useEffect, useContext, useState, Fragment } from "react";
 import { Container, Row, Form, Button, Card, Nav } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 import uniqid from "uniqid";
 
 import AuthContext from "../../context/auth/authContext";
 import VisaApplicationContext from "../../context/visa_application/visaApplicationContext";
-
+import NotFound from "../pages/NotFound";
 import Spinner from "../layouts/Spinner";
 
 import Step1 from "./Step1";
@@ -21,6 +22,7 @@ const Application = props => {
   const {
     full_application, //coming from visa appl state
     saved,
+    status,
     saveToDb,
     getSingleVisaAppById,
     loading,
@@ -32,12 +34,13 @@ const Application = props => {
   const { loadUser, user, isAuthenticated } = authContext;
   let firstTime = true;
   useEffect(() => {
+    destroyAllState();
     appId = uniqid("Application-");
     loadUser();
 
     if (typeof props.match.params.visaAppId !== "undefined") {
       //get single app by id; includes checking if id is legitimate and it's owned by current user.
-      getSingleVisaAppById(props.match.params.visaAppId);
+      getSingleVisaAppById(props.match.params.visaAppId, "rawUrl");
       appId = props.match.params.visaAppId;
     }
 
@@ -47,16 +50,10 @@ const Application = props => {
   }, []);
 
   useEffect(() => {
-    if (notFound === true) {
-      props.history.push("/404");
-    }
     if (finished === true) {
       props.history.push("/applications");
     }
     setLocalSaved(saved);
-
-    
-    
   }, [notFound, finished, saved]);
 
   const [currentTab, setCurrentTab] = useState(1);
@@ -135,6 +132,10 @@ const Application = props => {
     </Form>
   );
 
+  if (notFound && !authContext.loading) {
+    return <NotFound />;
+  }
+
   if (isAuthenticated && !authContext.loading && !notFound) {
     return (
       <div>
@@ -178,6 +179,8 @@ const Application = props => {
               <span style={{ color: localSaved ? "green" : "red" }}>
                 {localSaved ? "Saved" : "Not Saved"}
               </span>
+              , you can see all of your applications{" "}
+              <a href='/applications'>here.</a>
             </p>
 
             <Card style={{ width: "100%", margin: "0 auto" }}>

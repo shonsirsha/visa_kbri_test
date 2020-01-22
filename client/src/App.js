@@ -10,6 +10,8 @@ import Alert from "./components/layouts/Alert";
 import Home from "./components/pages/Home";
 import Login from "./components/auth/Login";
 import NotFound from "./components/pages/NotFound";
+import SingleVisa from "./components/visa_application/Visa";
+
 import VisaApplication from "./components/visa_application/Application";
 import Visas from "./components/visa_application/Visas";
 
@@ -35,6 +37,11 @@ function App() {
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/login' component={Login} />
+              <PrivateRoute
+                exact
+                path='/application/:visaAppId'
+                component={SingleVisa}
+              />
 
               {["/visaform", "/visaform/:visaAppId"].map((path, index) => (
                 <PrivateRoute
@@ -44,8 +51,8 @@ function App() {
                   component={VisaApplication}
                 />
               ))}
-              <Route exact path='/applications' component={Visas} />
-              <Route component={NotFound} />
+              <PrivateRoute exact path='/applications' component={Visas} />
+              {/* <Route component={NotFound} /> */}
             </Switch>
           </VisaApplicationState>
         </Fragment>

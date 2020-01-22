@@ -10,7 +10,7 @@ const Login = props => {
   });
 
   const authContext = useContext(AuthContext);
-  
+
   const visaApplicationContext = useContext(VisaApplicationContext);
   const { destroyAllState } = visaApplicationContext;
 
@@ -23,7 +23,7 @@ const Login = props => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      props.history.push("/visaform");
+      props.history.push("/applications");
     }
   }, [isAuthenticated]);
 
